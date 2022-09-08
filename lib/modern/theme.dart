@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:meta/meta.dart';
-
 class ModernBlockThemes {
   static const ModernBlockTheme blue = ModernBlockTheme(
     background: Color.fromARGB(255, 76, 151, 255),
@@ -24,7 +22,7 @@ class ModernBlockTheme {
   final Color border;
 
   const ModernBlockTheme({
-    @required this.background,
-    @required this.border,
+    required this.background,
+    required this.border,
   });
 }

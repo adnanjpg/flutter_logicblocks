@@ -11,11 +11,11 @@ typedef BlockDropped = bool Function(
 class SingleBlockTarget extends StatelessWidget {
   final Widget placeholder;
   final BlockDropped onDropped;
-  final BlockTargetAccept canAccept;
+  final BlockTargetAccept? canAccept;
 
   SingleBlockTarget({
-    @required this.placeholder,
-    @required this.onDropped,
+    required this.placeholder,
+    required this.onDropped,
     this.canAccept,
   });
 
@@ -54,13 +54,13 @@ class BlockTarget extends StatefulWidget {
   final bool acceptMultiple;
   final BlockDropped onDropped;
   final bool triggerHover;
-  final BlockTargetAccept canAccept;
+  final BlockTargetAccept? canAccept;
 
   BlockTarget({
-    @required this.builder,
-    @required this.onDropped,
-    @required this.acceptMultiple,
-    @required this.triggerHover,
+    required this.builder,
+    required this.onDropped,
+    required this.acceptMultiple,
+    required this.triggerHover,
     this.canAccept,
   });
 
@@ -77,7 +77,7 @@ class BlockTargetState extends State<BlockTarget> {
     assert(!_rejectedBlocks.contains(block));
 
     if ((widget.acceptMultiple || _candidateBlocks.length == 0) &&
-        (widget.canAccept == null || widget.canAccept(block))) {
+        (widget.canAccept == null || widget.canAccept!(block))) {
       setState(() {
         _candidateBlocks.add(block);
       });
@@ -105,7 +105,6 @@ class BlockTargetState extends State<BlockTarget> {
     });
 
     var result = widget.onDropped(block, globalPosition);
-    assert(result != null);
     return result;
   }
 

@@ -9,8 +9,8 @@ class ModernBlockReplaceHolder extends StatelessWidget {
   final String block;
 
   ModernBlockReplaceHolder({
-    @required this.block,
-  }) : assert(block != null);
+    required this.block,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +39,9 @@ class ModernBlockTarget extends StatelessWidget {
   final EdgeInsets silhouettePadding;
 
   ModernBlockTarget({
-    @required this.blockDropped,
+    required this.blockDropped,
     this.silhouettePadding = const EdgeInsets.only(),
-  })  : assert(blockDropped != null),
-        assert(silhouettePadding != null);
+  });
 
   @override
   Widget build(BuildContext context) {

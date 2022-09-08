@@ -9,12 +9,10 @@ class FixedBlock extends StatelessWidget {
   final bool isRoot;
 
   FixedBlock({
-    this.id,
-    this.mode,
-    this.isRoot,
-  })  : assert(id != null),
-        assert(mode != null),
-        assert(isRoot != null);
+    required this.id,
+    required this.mode,
+    required this.isRoot,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +24,12 @@ class FixedBlock extends StatelessWidget {
       isRoot: isRoot,
       child: Transform.scale(
         scale: 1,
-//        scale: isRoot && mode != BlockRenderMode.DragSilhouette ? 3: 1,
+        // scale: isRoot && mode != BlockRenderMode.DragSilhouette ? 3: 1,
         child: Builder(
-          builder: (context) {
-            return canvas.blockProvider(
+          builder: (BuildContext context) {
+            return canvas!.blockProvider(
               context,
-              BlockContext.of(context),
+              BlockContext.of(context)!,
             );
           },
         ),

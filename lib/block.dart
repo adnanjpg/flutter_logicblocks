@@ -19,21 +19,17 @@ class BlockContext extends InheritedWidget {
   final bool isRoot;
 
   const BlockContext({
-    Key key,
-    @required this.id,
-    @required this.mode,
-    @required this.isRoot,
-    @required Widget child,
-  })  : assert(id != null),
-        assert(mode != null),
-        assert(isRoot != null),
-        assert(child != null),
-        super(key: key, child: child);
+    Key? key,
+    required this.id,
+    required this.mode,
+    required this.isRoot,
+    required Widget child,
+  }) : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(BlockContext old) => mode != old.mode || id != old.id;
 
-  static BlockContext of(BuildContext context) {
+  static BlockContext? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<BlockContext>();
   }
 }
