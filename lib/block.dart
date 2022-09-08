@@ -34,6 +34,6 @@ class BlockContext extends InheritedWidget {
   bool updateShouldNotify(BlockContext old) => mode != old.mode || id != old.id;
 
   static BlockContext of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(BlockContext) as BlockContext;
+    return context.dependOnInheritedWidgetOfExactType<BlockContext>();
   }
 }

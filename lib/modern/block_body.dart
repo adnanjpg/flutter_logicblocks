@@ -1,10 +1,8 @@
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 import 'block_path.dart';
 import 'constants.dart';
@@ -62,9 +60,13 @@ class ModernBlockBodyElement extends ParentDataWidget<ModernBlockBody> {
       if (targetParent is RenderObject) targetParent.markNeedsLayout();
     }
   }
+
+  @override
+  // TODO: implement debugTypicalAncestorWidgetClass
+  Type get debugTypicalAncestorWidgetClass => throw UnimplementedError();
 }
 
-class ModernBlockBody extends MultiChildRenderObjectWidget {
+class ModernBlockBody extends MultiChildRenderObjectWidget implements ParentData{
   final bool isStartBlock;
   final ModernBlockTheme theme;
 
@@ -92,6 +94,12 @@ class ModernBlockBody extends MultiChildRenderObjectWidget {
     renderObject
       ..theme = theme
       ..isStartBlock = isStartBlock;
+  }
+
+  @override
+  void detach() {
+    // TODO: implement detach
+    throw UnimplementedError();
   }
 }
 

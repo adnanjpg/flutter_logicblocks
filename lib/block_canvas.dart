@@ -39,7 +39,7 @@ class CanvasContext extends InheritedWidget {
       blockProvider != old.blockProvider || onBlockMoved != old.onBlockMoved;
 
   static CanvasContext of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(CanvasContext) as CanvasContext;
+    return context.dependOnInheritedWidgetOfExactType<CanvasContext>();
   }
 }
 

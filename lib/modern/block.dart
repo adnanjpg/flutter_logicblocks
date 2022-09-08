@@ -107,11 +107,11 @@ class ModernBlock extends StatelessWidget {
     bool silhouette = block.mode == BlockRenderMode.DragSilhouette;
 
     return DefaultTextStyle(
-      style: Theme.of(context).textTheme.body1.apply(
+      style: Theme.of(context).textTheme.bodyText1.apply(
             color: Colors.white,
           ),
       child: Builder(builder: (context) {
-        var bodyElements = List<ModernBlockBodyElement>();
+        var bodyElements = <ModernBlockBodyElement>[];
 
         for (var elm in elements) {
           bodyElements.add(elm.build(context, this));
