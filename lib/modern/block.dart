@@ -37,9 +37,9 @@ class MaterialBlockChildBlockElement extends ModernBlockElement {
   final OnRemoved blockRemoved;
 
   MaterialBlockChildBlockElement({
-    /*required*/ required this.block,
-    /*required*/ required this.blockDropped,
-    /*required*/ required this.blockRemoved,
+    required this.block,
+    required this.blockDropped,
+    required this.blockRemoved,
   });
 
   @override

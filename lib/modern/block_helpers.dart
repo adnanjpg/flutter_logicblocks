@@ -21,7 +21,7 @@ class ModernBlockReplaceHolder extends StatelessWidget {
             width: triggerWidth,
             height: triggerHeight,
           ),
-//          decoration: BoxDecoration(color: Colors.yellow),
+          // decoration: BoxDecoration(color: Colors.yellow),
         ),
       ),
       canAccept: (id) {

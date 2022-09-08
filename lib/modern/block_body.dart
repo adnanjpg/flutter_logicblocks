@@ -8,7 +8,7 @@ import 'block_path.dart';
 import 'constants.dart';
 import 'theme.dart';
 
-class ModernBlockBodyElement extends ParentDataWidget<ModernBlockBody> {
+class ModernBlockBodyElement extends ParentDataWidget<ModernBlockBodyParentData> {
   final double leadOverlap;
   final double trailOverlap;
   final bool background;
@@ -63,12 +63,11 @@ class ModernBlockBodyElement extends ParentDataWidget<ModernBlockBody> {
     }
   }
 
-  // TODO: validate
   @override
   Type get debugTypicalAncestorWidgetClass => ModernBlockBody;
 }
 
-class ModernBlockBody extends MultiChildRenderObjectWidget implements ParentData {
+class ModernBlockBody extends MultiChildRenderObjectWidget {
   final bool isStartBlock;
   final ModernBlockTheme theme;
 
@@ -94,12 +93,6 @@ class ModernBlockBody extends MultiChildRenderObjectWidget implements ParentData
       ..theme = theme
       ..isStartBlock = isStartBlock;
   }
-
-  @override
-  void detach() {
-    // TODO: implement detach
-  }
-
 }
 
 class ModernBlockBodyParentData extends ContainerBoxParentData<RenderBox> {
