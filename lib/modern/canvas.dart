@@ -66,11 +66,19 @@ class ModernBlockCanvasContext extends StatelessWidget {
   }
 
   static ModernBlockCanvasData? of(BuildContext context) {
-    return CanvasContext.of(context)!.extra as ModernBlockCanvasData?;
+    if (CanvasContext.of(context) != null) {
+      return CanvasContext.of(context)!.extra as ModernBlockCanvasData?;
+    } else {
+      return null;
+    }
   }
 
   static T? getUserData<T>(BuildContext context) {
-    return of(context)!.userData as T?;
+    if (of(context) != null) {
+      return of(context)!.userData as T?;
+    } else {
+      return null;
+    }
   }
 }
 

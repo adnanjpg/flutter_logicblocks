@@ -69,7 +69,8 @@ class BlockCanvasBackground extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: Color.fromRGBO(249, 249, 249, 1),
+              color: Colors.transparent,
+              // color: Color.fromRGBO(249, 249, 249, 1),
               // color: Color.fromRGBO(20, 27, 44, 1),
               // color: Color.fromRGBO(51, 71, 113, 1),
             ),
