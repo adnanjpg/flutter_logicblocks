@@ -1,24 +1,22 @@
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 import 'block_path.dart';
 import 'constants.dart';
 import 'theme.dart';
 
-class ModernBlockBodyElement extends ParentDataWidget<ModernBlockBody> {
+class ModernBlockBodyElement extends ParentDataWidget<ModernBlockBodyParentData> {
   final double leadOverlap;
   final double trailOverlap;
   final bool background;
 
   ModernBlockBodyElement({
-    Key key,
-    @required this.background,
-    @required Widget child,
+    Key? key,
+    required this.background,
+    required Widget child,
     bool leftPad = true,
     bool topPad = true,
     bool bottomPad = true,
@@ -39,7 +37,9 @@ class ModernBlockBodyElement extends ParentDataWidget<ModernBlockBody> {
   @override
   void applyParentData(RenderObject renderObject) {
     assert(renderObject.parentData is ModernBlockBodyParentData);
-    final ModernBlockBodyParentData parentData = renderObject.parentData;
+    // TODO: review casting
+    final ModernBlockBodyParentData parentData =
+        renderObject.parentData as ModernBlockBodyParentData;
     bool needsLayout = false;
 
     if (parentData.leadOverlap != leadOverlap) {
@@ -58,10 +58,13 @@ class ModernBlockBodyElement extends ParentDataWidget<ModernBlockBody> {
     }
 
     if (needsLayout) {
-      final AbstractNode targetParent = renderObject.parent;
+      final AbstractNode? targetParent = renderObject.parent;
       if (targetParent is RenderObject) targetParent.markNeedsLayout();
     }
   }
+
+  @override
+  Type get debugTypicalAncestorWidgetClass => ModernBlockBody;
 }
 
 class ModernBlockBody extends MultiChildRenderObjectWidget {
@@ -69,14 +72,11 @@ class ModernBlockBody extends MultiChildRenderObjectWidget {
   final ModernBlockTheme theme;
 
   ModernBlockBody({
-    Key key,
-    @required this.isStartBlock,
-    @required this.theme,
-    @required List<ModernBlockBodyElement> children,
-  })  : assert(isStartBlock != null),
-        assert(theme != null),
-        assert(children != null),
-        assert(children.length > 0),
+    Key? key,
+    required this.isStartBlock,
+    required this.theme,
+    required List<ModernBlockBodyElement> children,
+  })  : assert(children.length > 0),
         super(key: key, children: children);
 
   @override
@@ -105,24 +105,24 @@ class ModernBlockBodyParentData extends ContainerBoxParentData<RenderBox> {
       '${super.toString()}; leadOverlap=$leadOverlap; trailOverlap=$trailOverlap, trailOverlap=$trailOverlap';
 }
 
-typedef _ChildSizingFunction = double Function(RenderBox child, double extent);
+typedef _ChildSizingFunction = double Function(RenderBox child, double? extent);
 
 class RenderModernBlockBody extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, ModernBlockBodyParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, ModernBlockBodyParentData>,
         DebugOverflowIndicatorMixin {
-  ModernBlockTheme theme;
-  bool isStartBlock;
+  late ModernBlockTheme theme;
+  bool? isStartBlock;
 
   RenderModernBlockBody({
-    List<RenderBox> children,
+    List<RenderBox>? children,
     this.isStartBlock,
   }) {
     addAll(children);
   }
 
-  Path _lastShape;
+  Path? _lastShape;
 
   double _overflow = 0;
 
@@ -135,18 +135,19 @@ class RenderModernBlockBody extends RenderBox
   }
 
   double _getIntrinsicSize({
-    Axis sizingDirection,
-    double extent,
-    _ChildSizingFunction childSize,
+    Axis? sizingDirection,
+    double? extent,
+    _ChildSizingFunction? childSize,
   }) {
     if (sizingDirection == Axis.vertical) {
       double totalSpace = 0.0;
-      RenderBox child = firstChild;
+      RenderBox? child = firstChild;
       bool first = true;
       while (child != null) {
-        final ModernBlockBodyParentData childParentData = child.parentData;
+        final ModernBlockBodyParentData childParentData =
+            child.parentData as ModernBlockBodyParentData;
 
-        var size = childSize(child, extent);
+        var size = childSize!(child, extent);
 
         if (!first) {
           size -= (childParentData.leadOverlap ?? 0);
@@ -164,14 +165,15 @@ class RenderModernBlockBody extends RenderBox
       return totalSpace;
     } else {
       double maxCrossSize = 0.0;
-      RenderBox child = firstChild;
+      RenderBox? child = firstChild;
       while (child != null) {
         double mainSize = child.getMaxIntrinsicHeight(double.infinity);
-        double crossSize = childSize(child, mainSize);
+        double crossSize = childSize!(child, mainSize);
 
         maxCrossSize = math.max(maxCrossSize, crossSize);
 
-        final ModernBlockBodyParentData childParentData = child.parentData;
+        final ModernBlockBodyParentData childParentData =
+            child.parentData as ModernBlockBodyParentData;
         child = childParentData.nextSibling;
       }
 
@@ -184,8 +186,8 @@ class RenderModernBlockBody extends RenderBox
     return _getIntrinsicSize(
       sizingDirection: Axis.horizontal,
       extent: height,
-      childSize: (RenderBox child, double extent) =>
-          child.getMinIntrinsicWidth(extent),
+      childSize: (RenderBox child, double? extent) =>
+          child.getMinIntrinsicWidth(extent!),
     );
   }
 
@@ -194,8 +196,8 @@ class RenderModernBlockBody extends RenderBox
     return _getIntrinsicSize(
       sizingDirection: Axis.horizontal,
       extent: height,
-      childSize: (RenderBox child, double extent) =>
-          child.getMaxIntrinsicWidth(extent),
+      childSize: (RenderBox child, double? extent) =>
+          child.getMaxIntrinsicWidth(extent!),
     );
   }
 
@@ -204,8 +206,8 @@ class RenderModernBlockBody extends RenderBox
     return _getIntrinsicSize(
       sizingDirection: Axis.vertical,
       extent: width,
-      childSize: (RenderBox child, double extent) =>
-          child.getMinIntrinsicHeight(extent),
+      childSize: (RenderBox child, double? extent) =>
+          child.getMinIntrinsicHeight(extent!),
     );
   }
 
@@ -214,20 +216,19 @@ class RenderModernBlockBody extends RenderBox
     return _getIntrinsicSize(
       sizingDirection: Axis.vertical,
       extent: width,
-      childSize: (RenderBox child, double extent) =>
-          child.getMaxIntrinsicHeight(extent),
+      childSize: (RenderBox child, double? extent) =>
+          child.getMaxIntrinsicHeight(extent!),
     );
   }
 
   @override
   void performLayout() {
-    assert(constraints != null);
-
     // Find the largest sized element with background
     double bodyWidth = 0;
-    RenderBox child = firstChild;
+    RenderBox? child = firstChild;
     while (child != null) {
-      final ModernBlockBodyParentData childParentData = child.parentData;
+      final ModernBlockBodyParentData childParentData =
+          child.parentData as ModernBlockBodyParentData;
 
       if (childParentData.background) {
         child.layout(
@@ -247,7 +248,8 @@ class RenderModernBlockBody extends RenderBox
     child = firstChild;
     bool first = true;
     while (child != null) {
-      final ModernBlockBodyParentData childParentData = child.parentData;
+      final ModernBlockBodyParentData childParentData =
+          child.parentData as ModernBlockBodyParentData;
 
       // All elements with backgrounds must have the same size
       BoxConstraints innerConstraints = childParentData.background
@@ -280,7 +282,8 @@ class RenderModernBlockBody extends RenderBox
     child = firstChild;
     first = true;
     while (child != null) {
-      final ModernBlockBodyParentData childParentData = child.parentData;
+      final ModernBlockBodyParentData childParentData =
+          child.parentData as ModernBlockBodyParentData;
 
       // Adjust position with overlaps
       currentPos -= (first ? 0 : (childParentData.leadOverlap ?? 0));
@@ -288,8 +291,7 @@ class RenderModernBlockBody extends RenderBox
       childParentData.offset = Offset(0, currentPos);
 
       currentPos += child.size.height -
-          (childParentData.nextSibling == null ||
-                  childParentData.trailOverlap == null
+          (childParentData.nextSibling == null
               ? 0
               : childParentData.trailOverlap);
 
@@ -299,14 +301,15 @@ class RenderModernBlockBody extends RenderBox
 
     // Build shape
     var builder = ModernBlockPathBuilder(
-      circleTop: isStartBlock,
+      circleTop: isStartBlock!,
     );
     builder.start();
     child = firstChild;
     bool hadBody = false;
     while (child != null) {
-      final ModernBlockBodyParentData childParentData = child.parentData;
-      final RenderBox next = childParentData.nextSibling;
+      final ModernBlockBodyParentData childParentData =
+          child.parentData as ModernBlockBodyParentData;
+      final RenderBox? next = childParentData.nextSibling;
 
       if (childParentData.background) {
         builder.addBlock(
@@ -324,9 +327,10 @@ class RenderModernBlockBody extends RenderBox
     _lastShape = builder.path;
   }
 
-  bool _hasMoreBodies(RenderBox child) {
+  bool _hasMoreBodies(RenderBox? child) {
     while (child != null) {
-      final ModernBlockBodyParentData childParentData = child.parentData;
+      final ModernBlockBodyParentData childParentData =
+          child.parentData as ModernBlockBodyParentData;
 
       if (childParentData.background) {
         return true;
@@ -339,16 +343,16 @@ class RenderModernBlockBody extends RenderBox
   }
 
   @override
-  bool hitTestChildren(BoxHitTestResult result, {Offset position}) {
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
     if (defaultHitTestChildren(result, position: position)) {
       return true;
     }
 
-    return _lastShape != null && _lastShape.contains(position);
+    return _lastShape != null && _lastShape!.contains(position);
   }
 
   @override
-  Rect describeApproximatePaintClip(RenderObject child) =>
+  Rect? describeApproximatePaintClip(RenderObject child) =>
       _hasOverflow ? Offset.zero & size : null;
 
   void paintContent(PaintingContext context, Offset offset) {
@@ -361,13 +365,14 @@ class RenderModernBlockBody extends RenderBox
     final paint = Paint();
     canvas.save();
     canvas.translate(offset.dx, offset.dy);
-    canvas.drawShadow(_lastShape, Colors.grey[900], 2.0, true);
+    canvas.drawShadow(_lastShape!, Colors.grey[900]!, 2.0, true);
     canvas.restore();
 
     // Draw children without backgrounds
-    RenderBox child = firstChild;
+    RenderBox? child = firstChild;
     while (child != null) {
-      final ModernBlockBodyParentData childParentData = child.parentData;
+      final ModernBlockBodyParentData childParentData =
+          child.parentData as ModernBlockBodyParentData;
       if (!childParentData.background) {
         context.paintChild(child, childParentData.offset + offset);
       }
@@ -379,19 +384,20 @@ class RenderModernBlockBody extends RenderBox
     canvas.save();
     canvas.translate(offset.dx, offset.dy);
     paint.color = theme.background;
-    canvas.drawPath(_lastShape, paint);
+    canvas.drawPath(_lastShape!, paint);
 
     // Draw border
     paint.color = theme.border;
     paint.strokeWidth = 2;
     paint.style = PaintingStyle.stroke;
-    canvas.drawPath(_lastShape, paint);
+    canvas.drawPath(_lastShape!, paint);
     canvas.restore();
 
     // Draw children with backgrounds
     child = firstChild;
     while (child != null) {
-      final ModernBlockBodyParentData childParentData = child.parentData;
+      final ModernBlockBodyParentData childParentData =
+          child.parentData as ModernBlockBodyParentData;
       if (childParentData.background) {
         context.paintChild(child, childParentData.offset + offset);
       }

@@ -17,7 +17,7 @@ class MaterialBlockContentElement extends ModernBlockElement {
   final bool leftPad;
 
   MaterialBlockContentElement({
-    @required this.content,
+    required this.content,
     this.leftPad = true,
   });
 
@@ -37,24 +37,22 @@ class MaterialBlockChildBlockElement extends ModernBlockElement {
   final OnRemoved blockRemoved;
 
   MaterialBlockChildBlockElement({
-    @required this.block,
-    @required this.blockDropped,
-    @required this.blockRemoved,
-  })  : assert(blockDropped != null),
-        assert(blockRemoved != null);
+    required this.block,
+    required this.blockDropped,
+    required this.blockRemoved,
+  });
 
   @override
   ModernBlockBodyElement build(BuildContext context, ModernBlock block) {
-    var block = BlockContext.of(context);
+    var block = BlockContext.of(context)!;
     bool silhouette = block.mode == BlockRenderMode.DragSilhouette;
 
     return ModernBlockBodyElement(
       background: false,
       topPad: false,
       bottomPad: false,
-      trailOverlap:
-          !silhouette && this.block != null ? triggerHeight - notchHeight : 0,
-      child: !silhouette && this.block != null
+      trailOverlap: !silhouette ? triggerHeight - notchHeight : 0,
+      child: !silhouette
           ? buildChildWidget(block)
           : ModernBlockTarget(
               blockDropped: blockDropped,
@@ -83,35 +81,31 @@ class ModernBlock extends StatelessWidget {
   final ModernBlockTheme theme;
   final List<ModernBlockElement> elements;
   final bool allowNextBlock;
-  final String nextBlock;
+  final String? nextBlock;
   final BlockDropped nextBlockDropped;
   final OnRemoved nextBlockRemoved;
 
   ModernBlock({
-    @required this.isStartBlock,
-    @required this.theme,
-    @required this.elements,
-    @required this.allowNextBlock,
+    required this.isStartBlock,
+    required this.theme,
+    required this.elements,
+    required this.allowNextBlock,
     this.nextBlock,
-    this.nextBlockDropped,
-    this.nextBlockRemoved,
-  })  : assert(isStartBlock != null),
-        assert(theme != null),
-        assert(elements != null && elements.length > 0),
-        assert(nextBlockDropped != null),
-        assert(nextBlockRemoved != null);
+    required this.nextBlockDropped,
+    required this.nextBlockRemoved,
+  }) : assert(elements.length > 0);
 
   @override
   Widget build(BuildContext context) {
-    var block = BlockContext.of(context);
+    BlockContext block = BlockContext.of(context)!;
     bool silhouette = block.mode == BlockRenderMode.DragSilhouette;
 
     return DefaultTextStyle(
-      style: Theme.of(context).textTheme.body1.apply(
+      style: Theme.of(context).textTheme.bodyText1!.apply(
             color: Colors.white,
           ),
       child: Builder(builder: (context) {
-        var bodyElements = List<ModernBlockBodyElement>();
+        var bodyElements = <ModernBlockBodyElement>[];
 
         for (var elm in elements) {
           bodyElements.add(elm.build(context, this));
@@ -147,14 +141,14 @@ class ModernBlock extends StatelessWidget {
 
   Widget buildNextWidget(BlockContext block) {
     return DraggableBlock(
-      id: nextBlock,
+      id: nextBlock!,
       mode: block.mode,
       isRoot: false,
       onRemoved: nextBlockRemoved,
       dragPlaceholder: Padding(
         padding: EdgeInsets.only(bottom: triggerHeight - notchHeight),
         child: ModernBlockReplaceHolder(
-          block: nextBlock,
+          block: nextBlock!,
         ),
       ),
     );

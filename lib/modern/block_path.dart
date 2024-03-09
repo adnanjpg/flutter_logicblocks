@@ -7,9 +7,8 @@ class ModernBlockPathBuilder {
   final bool circleTop;
 
   ModernBlockPathBuilder({
-    this.circleTop,
-  })  : path = Path(),
-        assert(circleTop != null);
+    required this.circleTop,
+  }) : path = Path();
 
   void createNotch(Path path, double x, double y, double width, double height,
       double radius, bool xFlip) {
@@ -53,12 +52,12 @@ class ModernBlockPathBuilder {
   double radius = notchRadius;
   double notchOffset = 10;
 
-  double lastY;
+  late double lastY;
 
   void start() {
-    if (circleTop){
+    if (circleTop) {
       path.moveTo(0, entryCircleHeight);
-    }else {
+    } else {
       path.moveTo(radius, 0);
       path.lineTo(colWidth, 0);
     }
@@ -66,12 +65,13 @@ class ModernBlockPathBuilder {
   }
 
   void addBlock(double yOff, Size size, bool isFirst, bool isLast) {
-//    assert(lastY == yOff);
+    // assert(lastY == yOff);
 
     if (circleTop && isFirst) {
       yOff += entryCircleHeight;
       size = Size(size.width, size.height - entryCircleHeight);
-      path.quadraticBezierTo(entryCircleWidth / 2, - entryCircleHeight, entryCircleWidth, entryCircleHeight);
+      path.quadraticBezierTo(entryCircleWidth / 2, -entryCircleHeight,
+          entryCircleWidth, entryCircleHeight);
     } else {
       if (isFirst) {
         path.lineTo(colWidth, yOff);
@@ -107,7 +107,7 @@ class ModernBlockPathBuilder {
     } else {
       path.lineTo(colWidth + radius, lastY);
       path.quadraticBezierTo(colWidth, lastY, colWidth, lastY + radius);
-//      lastY += radius;
+      // lastY += radius;
     }
   }
 
@@ -115,9 +115,9 @@ class ModernBlockPathBuilder {
     path.lineTo(radius, lastY);
     path.quadraticBezierTo(0, lastY, 0, lastY - radius);
 
-    if (circleTop){
+    if (circleTop) {
       path.lineTo(0, entryCircleHeight);
-    }else {
+    } else {
       path.lineTo(0, radius);
       path.quadraticBezierTo(0, 0, radius, 0);
     }

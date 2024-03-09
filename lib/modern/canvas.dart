@@ -1,32 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../block.dart';
 import '../block_canvas.dart';
 
 class ModernBlockCanvasContext extends StatelessWidget {
-  final Key key;
+  final Key? key;
   final BlockProvider blockBuilder;
   final RootBlocksProvider rootBlocksProvider;
   final OnBlockMoved onBlockMoved;
   final double zoom;
-  final Offset offset;
+  final Offset? offset;
   final dynamic userData;
   final Widget child;
 
   const ModernBlockCanvasContext({
     this.key,
-    @required this.blockBuilder,
-    @required this.onBlockMoved,
-    @required this.rootBlocksProvider,
+    required this.blockBuilder,
+    required this.onBlockMoved,
+    required this.rootBlocksProvider,
     this.zoom = 1,
     this.offset,
     this.userData,
-    @required this.child,
-  })  : assert(blockBuilder != null),
-        assert(onBlockMoved != null),
-        assert(rootBlocksProvider != null),
-        assert(child != null);
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +65,20 @@ class ModernBlockCanvasContext extends StatelessWidget {
     return Placeholder();
   }
 
-  static ModernBlockCanvasData of(BuildContext context) {
-    return CanvasContext.of(context).extra as ModernBlockCanvasData;
+  static ModernBlockCanvasData? of(BuildContext context) {
+    if (CanvasContext.of(context) != null) {
+      return CanvasContext.of(context)!.extra as ModernBlockCanvasData?;
+    } else {
+      return null;
+    }
   }
 
-  static T getUserData<T>(BuildContext context) {
-    return of(context).userData as T;
+  static T? getUserData<T>(BuildContext context) {
+    if (of(context) != null) {
+      return of(context)!.userData as T?;
+    } else {
+      return null;
+    }
   }
 }
 
@@ -82,6 +86,6 @@ class ModernBlockCanvasData {
   final dynamic userData;
 
   ModernBlockCanvasData({
-    @required this.userData,
+    required this.userData,
   });
 }
